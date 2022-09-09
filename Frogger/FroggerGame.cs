@@ -20,8 +20,6 @@ namespace Frogger
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
             StateComponent stateComponent = new(this);
             GameState gameState = new GameState(stateComponent.Machine);
             stateComponent.Machine.Add("game", gameState);
