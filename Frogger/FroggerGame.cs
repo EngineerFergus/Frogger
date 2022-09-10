@@ -14,6 +14,8 @@ namespace Frogger
         public FroggerGame()
         {
             _graphics = new GraphicsDeviceManager(this);
+            _graphics.PreferredBackBufferWidth = 224 * 2;
+            _graphics.PreferredBackBufferHeight = 256 * 2;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
