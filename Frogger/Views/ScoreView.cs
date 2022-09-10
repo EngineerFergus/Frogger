@@ -1,14 +1,8 @@
-﻿using Frogger.FSM;
-using Frogger.General;
+﻿using Frogger.General;
 using Frogger.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Frogger.Views
 {
@@ -32,6 +26,13 @@ namespace Frogger.Views
 
             Font.Draw("HI-SCORE", new Vector2(88, 0), Color.White);
             Font.Draw(Player.HiScore.ToString(), new Vector2(96, 8), Color.Red);
+
+            for (int i = 0; i < Player.Lives; i++)
+            {
+                Font.Draw("/", new Vector2(i * 8, 30 * 8), Color.White);
+            }
+
+            Font.Draw("TIME", new Vector2(24 * 8, 31 * 8), Color.Yellow);
         }
     }
 }
