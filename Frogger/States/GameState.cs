@@ -1,4 +1,5 @@
-﻿using Frogger.FSM;
+﻿using Frogger.Controllers;
+using Frogger.FSM;
 using Frogger.General;
 using Frogger.Models;
 using Frogger.Views;
@@ -13,9 +14,10 @@ namespace Frogger.States
         private static int Scale = 2;
 
         private readonly List<BaseView> Views = new List<BaseView>();
+        private readonly List<IController> Controllers = new List<IController>();
         private readonly SpriteBatch Sprites;
         private readonly RenderTarget2D Screen;
-        private PlayerModel Player;
+        private readonly PlayerModel Player;
 
         public GameState(StateMachine stateMachine) : base(stateMachine)
         {
@@ -26,6 +28,9 @@ namespace Frogger.States
 
             Views.Add(new BackgroundView(stateMachine.CurrentGame.Content, Sprites));
             Views.Add(new ScoreView(stateMachine.CurrentGame.Content, Sprites, Player));
+            Views.Add(new PlayerView(stateMachine.CurrentGame.Content, Sprites, Player));
+
+            Controllers.Add(new PlayerController(Player));
         }
 
         public override void Draw()
@@ -61,7 +66,10 @@ namespace Frogger.States
 
         public override void Update(float deltaTime)
         {
-
+            foreach(var controller in Controllers)
+            {
+                controller.Update(deltaTime);
+            }
         }
     }
 }

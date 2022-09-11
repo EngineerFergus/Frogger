@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Frogger.General
+namespace Frogger.Controllers
 {
-    internal class AssetManager
+    internal interface IController
     {
-        // https://www.youtube.com/watch?v=lUwfpwk-4ko 31:58
+        void Update(float deltaTime);
     }
 }
