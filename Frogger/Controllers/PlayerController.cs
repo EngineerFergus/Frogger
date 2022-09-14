@@ -1,21 +1,19 @@
 ﻿using Frogger.Models;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Frogger.Controllers
 {
     internal class PlayerController : IController
     {
-        private static float MoveCooldownPeriod = 0.1f;
+        private static float MoveCooldownPeriod = 0.2f;
         private static float Distance = 8f;
 
         private readonly PlayerModel Model;
-        private float MoveCooldown = 0f;
+        private FrogAnimation Animation;
 
         public PlayerController(PlayerModel model)
         {
@@ -24,36 +22,50 @@ namespace Frogger.Controllers
 
         public void Update(float deltaTime)
         {
-            if (MoveCooldown > 0f)
+            if (Animation != null && !Animation.Done)
             {
-                MoveCooldown -= deltaTime;
+                Animation.Update(deltaTime);
+                Model.Position = Animation.Position;
+                Model.Frame = Animation.Frame;
                 return;
             }
 
-            MoveCooldown = 0f;
+            Animation = null;
 
             var state = Keyboard.GetState();
             var pressedKeys = state.GetPressedKeys();
 
             if (pressedKeys.Contains(Keys.Up))
             {
-                Model.Position += new Vector2(0, -Distance);
-                MoveCooldown = MoveCooldownPeriod;
+                Model.Flip = SpriteEffects.None;
+                Animation = new FrogAnimation(new int[] { 34, 33, 32, 34 }, 
+                    Model.Position, 
+                    new Vector2(0, -Distance), 
+                    MoveCooldownPeriod);
             }
             else if (pressedKeys.Contains(Keys.Down))
             {
-                Model.Position += new Vector2(0, Distance);
-                MoveCooldown = MoveCooldownPeriod;
+                Model.Flip = SpriteEffects.FlipVertically;
+                Animation = new FrogAnimation(new int[] { 34, 33, 32, 34 },
+                    Model.Position,
+                    new Vector2(0, Distance),
+                    MoveCooldownPeriod);
             }
             else if (pressedKeys.Contains(Keys.Left))
             {
-                Model.Position += new Vector2(-Distance, 0);
-                MoveCooldown = MoveCooldownPeriod;
+                Model.Flip = SpriteEffects.None;
+                Animation = new FrogAnimation(new int[] { 37, 36, 35, 37 },
+                    Model.Position,
+                    new Vector2(-Distance, 0),
+                    MoveCooldownPeriod);
             }
             else if (pressedKeys.Contains(Keys.Right))
             {
-                Model.Position += new Vector2(Distance, 0);
-                MoveCooldown = MoveCooldownPeriod;
+                Model.Flip = SpriteEffects.FlipHorizontally;
+                Animation = new FrogAnimation(new int[] { 37, 36, 35, 37 },
+                    Model.Position,
+                    new Vector2(Distance, 0),
+                    MoveCooldownPeriod);
             }
         }
     }

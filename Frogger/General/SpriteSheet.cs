@@ -30,6 +30,11 @@ namespace Frogger.General
 
         public void Draw(Vector2 position, int frame, Color color)
         {
+            Draw(position, frame, color, SpriteEffects.None);
+        }
+
+        public void Draw(Vector2 position, int frame, Color color, SpriteEffects effect)
+        {
             if (frame < 0 || frame > Columns * Rows)
             {
                 throw new ArgumentOutOfRangeException($"{frame} is out of range!");
@@ -40,7 +45,15 @@ namespace Frogger.General
             int x = col * CellWidth;
             int y = row * CellHeight;
 
-            Batch.Draw(Texture, position, new Rectangle(x, y, CellWidth, CellHeight), color);
+            Batch.Draw(Texture, 
+                position, 
+                new Rectangle(x, y, CellWidth, CellHeight), 
+                color, 
+                0.0f, 
+                Vector2.Zero, 
+                1, 
+                effect, 
+                0);
         }
     }
 }

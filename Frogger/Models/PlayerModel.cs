@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Frogger.Models
 {
@@ -10,7 +11,7 @@ namespace Frogger.Models
         public int HiScore { get; set; }
         public Vector2 Position { get; set; }
         public int Frame { get; set; }
-        public bool Mirrored { get; set; }
+        public SpriteEffects Flip { get; set; }
 
         public PlayerModel()
         {
@@ -20,6 +21,7 @@ namespace Frogger.Models
             Score = 0;
             Frame = 34;
             Position = new Vector2(16 * 6, 224);
+            Flip = SpriteEffects.None;
         }
     }
 }
