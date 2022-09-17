@@ -3,6 +3,7 @@ using Frogger.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace Frogger.Views
 {
@@ -20,7 +21,10 @@ namespace Frogger.Views
 
         public override void Draw()
         {
-            Blocks.Draw(Model.Position, Model.Frame, Color.White, Model.Flip);
+            var x = Math.Round(Model.Position.X, 0, MidpointRounding.AwayFromZero);
+            var y = Math.Round(Model.Position.Y, 0, MidpointRounding.AwayFromZero);
+
+            Blocks.Draw(new Vector2((int)x, (int)y), Model.Frame, Color.White, Model.Flip);
         }
     }
 }

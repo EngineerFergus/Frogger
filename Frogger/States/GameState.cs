@@ -24,13 +24,19 @@ namespace Frogger.States
             Screen = new RenderTarget2D(stateMachine.CurrentGame.GraphicsDevice, 224, 256);
             Sprites = new SpriteBatch(stateMachine.CurrentGame.GraphicsDevice);
 
-            Player = new PlayerModel();
+            Player = new();
+            GoalContainerModel goals = new();
 
             Views.Add(new BackgroundView(stateMachine.CurrentGame.Content, Sprites));
             Views.Add(new ScoreView(stateMachine.CurrentGame.Content, Sprites, Player));
             Views.Add(new PlayerView(stateMachine.CurrentGame.Content, Sprites, Player));
+            Views.Add(new FrogPositionView(stateMachine.CurrentGame.Content, Sprites, Player));
+            Views.Add(new GoalView(stateMachine.CurrentGame.Content, Sprites, goals));
 
-            Controllers.Add(new PlayerController(Player));
+            var playerController = new PlayerController(Player);
+
+            Controllers.Add(playerController);
+            Controllers.Add(new GoalController(Player, goals, playerController));
         }
 
         public override void Draw()
