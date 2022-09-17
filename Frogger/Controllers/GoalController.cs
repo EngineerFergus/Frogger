@@ -12,13 +12,13 @@ namespace Frogger.Controllers
     {
         private readonly PlayerModel Player;
         private readonly GoalContainerModel GoalContainer;
-        private readonly IReset Reset;
+        private readonly IReset PlayerReset;
 
-        public GoalController(PlayerModel model, GoalContainerModel goals, IReset reset)
+        public GoalController(PlayerModel model, GoalContainerModel goals, IReset playerReset)
         {
             Player = model;
             GoalContainer = goals;
-            Reset = reset;
+            PlayerReset = playerReset;
         }
 
         public void Update(float deltaTime)
@@ -27,14 +27,22 @@ namespace Frogger.Controllers
 
             foreach (var goal in GoalContainer.Goals)
             {
-                // TODO what if this slot is occupied?
+                if (!goal.Area.Intersects(playerArea))
+                {
+                    continue;
+                }
 
-                if (goal.Area.Intersects(playerArea))
+                if (goal.Occupied)
+                {
+                    PlayerReset.Reset(ResetMode.Death);
+                }
+                else if (!goal.Occupied)
                 {
                     goal.Occupied = true;
-                    Reset.Reset();
-                    return;
+                    PlayerReset.Reset(ResetMode.Goal);
                 }
+
+                return;
             }
         }
     }

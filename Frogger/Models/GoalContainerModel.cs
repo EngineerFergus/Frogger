@@ -11,6 +11,20 @@ namespace Frogger.Models
     {
         public IList<GoalModel> Goals { get; }
 
+        public bool GoalsFilled
+        {
+            get
+            {
+                int count = 0;
+                foreach (var goal in Goals)
+                {
+                    if (goal.Occupied) { count++; }
+                }
+
+                return count == Goals.Count;
+            }
+        }
+
         public GoalContainerModel()
         {
             Goals = new List<GoalModel>();

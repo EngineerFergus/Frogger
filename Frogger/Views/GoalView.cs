@@ -3,12 +3,6 @@ using Frogger.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Frogger.Views
 {
@@ -28,7 +22,10 @@ namespace Frogger.Views
         {
             foreach (var goal in Goals.Goals)
             {
-                Blocks.Draw(goal.Area.Location.ToVector2(), 10, Color.White);
+                if (goal.Occupied)
+                {
+                    Blocks.Draw(goal.Area.Location.ToVector2(), 10, Color.White);
+                }
             }
         }
     }

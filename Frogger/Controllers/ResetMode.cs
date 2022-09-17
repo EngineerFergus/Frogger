@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Frogger.Controllers
 {
-    internal interface IReset
+    internal enum ResetMode
     {
-        void Reset(ResetMode mode);
+        Goal,
+        Death
     }
 }

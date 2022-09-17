@@ -81,8 +81,14 @@ namespace Frogger.Controllers
             }
         }
 
-        public void Reset()
+        public void Reset(ResetMode mode)
         {
+            if (mode == ResetMode.Death)
+            {
+                // TODO what happens when Player has no lives?
+                Model.Lives--;
+            }
+
             Model.Frame = 34;
             Model.Flip = SpriteEffects.None;
             Animation = null;
