@@ -37,6 +37,7 @@ namespace Frogger.States
 
             Controllers.Add(playerController);
             Controllers.Add(new GoalController(Player, goals, playerController));
+            Controllers.Add(new HomeAnimationController(goals));
         }
 
         public override void Draw()

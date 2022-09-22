@@ -8,8 +8,6 @@ namespace Frogger.Views
 {
     internal class GoalView : BaseView
     {
-        public int Frame { get; set; }
-
         private readonly float CooldownPeriod = 1f;
         private readonly float FlashPeriod = 0.1f;
 
@@ -29,7 +27,7 @@ namespace Frogger.Views
             {
                 if (goal.Occupied)
                 {
-                    Blocks.Draw(goal.Area.Location.ToVector2(), 10 + Frame, Color.White);
+                    Blocks.Draw(goal.Area.Location.ToVector2(), 10 + goal.Frame, Color.White);
                 }
             }
         }

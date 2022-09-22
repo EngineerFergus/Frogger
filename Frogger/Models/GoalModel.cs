@@ -8,10 +8,13 @@ namespace Frogger.Models
 
         public Rectangle Area { get; }
 
+        public int Frame { get; set; }
+
         public GoalModel(Rectangle rect)
         {
             Area = rect;
             Occupied = false;
+            Frame = 0;
         }
     }
 }
