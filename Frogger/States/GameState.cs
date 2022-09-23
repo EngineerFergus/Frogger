@@ -1,4 +1,5 @@
 ﻿using Frogger.Controllers;
+using Frogger.Factories;
 using Frogger.FSM;
 using Frogger.Models;
 using Frogger.Views;
@@ -10,7 +11,7 @@ namespace Frogger.States
 {
     internal class GameState : BaseState
     {
-        private static int Scale = 2;
+        private static readonly int Scale = 2;
 
         private readonly List<BaseView> Views = new List<BaseView>();
         private readonly List<IController> Controllers = new List<IController>();
@@ -37,6 +38,13 @@ namespace Frogger.States
             Controllers.Add(playerController);
             Controllers.Add(new GoalController(Player, goals, playerController));
             Controllers.Add(new HomeAnimationController(goals));
+
+            var bulldozerRowModel = new VehicleRowModel(BulldozerFactory.CreateFirstStage());
+            VehicleController bulldozerController = new VehicleController(bulldozerRowModel);
+            VehicleView bulldozerView = new VehicleView(stateMachine.CurrentGame.Content, Sprites, bulldozerRowModel);
+
+            Views.Add(bulldozerView);
+            Controllers.Add(bulldozerController);
         }
 
         public override void Draw()
