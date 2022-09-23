@@ -1,6 +1,5 @@
 ﻿using Frogger.Controllers;
 using Frogger.FSM;
-using Frogger.General;
 using Frogger.Models;
 using Frogger.Views;
 using Microsoft.Xna.Framework;
@@ -24,7 +23,7 @@ namespace Frogger.States
             Screen = new RenderTarget2D(stateMachine.CurrentGame.GraphicsDevice, 224, 256);
             Sprites = new SpriteBatch(stateMachine.CurrentGame.GraphicsDevice);
 
-            Player = new();
+            Player = new PlayerModel();
             GoalContainerModel goals = new();
 
             Views.Add(new BackgroundView(stateMachine.CurrentGame.Content, Sprites));
@@ -33,7 +32,7 @@ namespace Frogger.States
             Views.Add(new FrogPositionView(stateMachine.CurrentGame.Content, Sprites, Player));
             Views.Add(new GoalView(stateMachine.CurrentGame.Content, Sprites, goals));
 
-            var playerController = new PlayerController(Player);
+            PlayerController playerController = new(Player);
 
             Controllers.Add(playerController);
             Controllers.Add(new GoalController(Player, goals, playerController));
