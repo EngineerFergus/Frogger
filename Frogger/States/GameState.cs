@@ -39,12 +39,32 @@ namespace Frogger.States
             Controllers.Add(new GoalController(Player, goals, playerController));
             Controllers.Add(new HomeAnimationController(goals));
 
-            var bulldozerRowModel = new VehicleRowModel(BulldozerFactory.CreateFirstStage());
-            VehicleController bulldozerController = new VehicleController(bulldozerRowModel);
-            VehicleView bulldozerView = new VehicleView(stateMachine.CurrentGame.Content, Sprites, bulldozerRowModel);
+            var bulldozerRowModel = new VehicleRowModel(BulldozerFactory.CreateFirstStage(), pixelsPerSecond: 32f);
+            var racingCarRowModel = new VehicleRowModel(RacingCarFactory.CreateFirstStage(), 0, 128f,  ghost: VehicleGhost.NoGhost, coolDownPeriod: 2f);
+            var sedanCarRowModel = new VehicleRowModel(SedanCarFactory.CreateFirstStage(), 0, 32f, direction: VehicleDirection.RightToLeft);
+            var sedanCarRowModel2 = new VehicleRowModel(SedanCarFactory.CreateFirstStage(-8, 208), 0, 32f, direction: VehicleDirection.RightToLeft);
+            var sedanCarRowModel3 = new VehicleRowModel(SedanCarFactory.CreateFirstStage(-12, 144), 0, 32f, direction: VehicleDirection.RightToLeft);
 
-            Views.Add(bulldozerView);
-            Controllers.Add(bulldozerController);
+            var vehicleContoller = new VehicleController(Player, playerController, new VehicleRowModel[]
+            {
+                bulldozerRowModel,
+                racingCarRowModel,
+                sedanCarRowModel,
+                sedanCarRowModel2,
+                sedanCarRowModel3
+            });
+
+            var vehicleView = new VehicleView(stateMachine.CurrentGame.Content, Sprites, new VehicleRowModel[]
+            {
+                bulldozerRowModel,
+                racingCarRowModel,
+                sedanCarRowModel,
+                sedanCarRowModel2,
+                sedanCarRowModel3
+            });
+
+            Views.Add(vehicleView);
+            Controllers.Add(vehicleContoller);
         }
 
         public override void Draw()

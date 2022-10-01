@@ -16,7 +16,7 @@ namespace Frogger.Factories
             List<VehicleModel> models = new List<VehicleModel>();
 
             models.Add(new VehicleModel(7, new Microsoft.Xna.Framework.Vector2(16, 192)));
-            //models.Add(new VehicleModel(7, new Microsoft.Xna.Framework.Vector2(16 + 64, 192)));
+            models.Add(new VehicleModel(7, new Microsoft.Xna.Framework.Vector2(16 + 64, 192)));
             models.Add(new VehicleModel(7, new Microsoft.Xna.Framework.Vector2(16 + (64 * 2), 192)));
             models.Add(new VehicleModel(7, new Microsoft.Xna.Framework.Vector2(16 + (64 * 3), 192)));
 
