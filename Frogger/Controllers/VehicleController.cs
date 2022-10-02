@@ -31,15 +31,25 @@ namespace Frogger.Controllers
 
             foreach (var row in Rows)
             {
-                //foreach (var vehicle in row.Vehicles)
-                //{
-                //    var rRect = new Rectangle((int)vehicle.Position.X, (int)vehicle.Position.Y, 16, 16);
-                //
-                //    if (rRect.Intersects(playerArea))
-                //    {
-                //        Reset.Reset(ResetMode.Death);
-                //    }
-                //}
+                foreach (var vehicle in row.Vehicles)
+                {
+                    var rRect = new Rectangle((int)(vehicle.Position.X + row.OffsetRight.X), (int)vehicle.Position.Y, 16, 16);
+                
+                    if (rRect.Intersects(playerArea))
+                    {
+                        Reset.Reset(ResetMode.Death);
+                    }
+
+                    if (row.Ghost == VehicleGhost.Ghost)
+                    {
+                        var lRect = new Rectangle((int)(vehicle.Position.X + row.OffsetLeft.X), (int)vehicle.Position.Y, 16, 16);
+
+                        if (lRect.Intersects(playerArea))
+                        {
+                            Reset.Reset(ResetMode.Death);
+                        }
+                    }
+                }
 
                 if (row.CurrentCooldown > 0)
                 {

@@ -19,6 +19,12 @@ namespace Frogger.Controllers
             Player = model;
             GoalContainer = goals;
             PlayerReset = playerReset;
+            PlayerReset.MoveFinished += PlayerMoveFinished;
+        }
+
+        public void PlayerMoveFinished(object sender, EventArgs e)
+        {
+            
         }
 
         public void Update(float deltaTime)

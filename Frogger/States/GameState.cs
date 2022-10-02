@@ -6,6 +6,7 @@ using Frogger.Views;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 
 namespace Frogger.States
 {
@@ -19,6 +20,8 @@ namespace Frogger.States
         private readonly RenderTarget2D Screen;
         private readonly PlayerModel Player;
         private readonly DebugView Debugger;
+
+        private VehicleRowModel DuneBuggyRowModel;
 
         public GameState(StateMachine stateMachine) : base(stateMachine)
         {
@@ -38,7 +41,7 @@ namespace Frogger.States
             Views.Add(new GoalView(stateMachine.CurrentGame.Content, Sprites, goals));
             Views.Add(Debugger);
 
-            Debugger.AddRect("river", new Rectangle(0, 48, 244, 80), new Color(Color.Red, 0.25f));
+            //Debugger.AddOrUpdateRect("river", new Rectangle(0, 48, 244, 80), new Color(Color.Red, 0.25f));
 
             PlayerController playerController = new(Player);
 
@@ -49,7 +52,7 @@ namespace Frogger.States
             var bulldozerRowModel = new VehicleRowModel(BulldozerFactory.CreateFirstStage(), pixelsPerSecond: 32f);
             var racingCarRowModel = new VehicleRowModel(RacingCarFactory.CreateFirstStage(), 0, 128f, 2f, VehicleGhost.NoGhost);
             var sedanCarRowModel = new VehicleRowModel(GenericCarFactory.CreateFirstStage(), 0, 32f, 0f, VehicleGhost.Ghost, VehicleDirection.RightToLeft);
-            var duneBuggyRowModel = new VehicleRowModel(GenericCarFactory.CreateFirstStage(y: 208, frame: 9), 0, 32f, 0f, VehicleGhost.Ghost, VehicleDirection.RightToLeft);
+            DuneBuggyRowModel = new VehicleRowModel(GenericCarFactory.CreateFirstStage(y: 208, frame: 9), 0, 32f, 0f, VehicleGhost.Ghost, VehicleDirection.RightToLeft);
             var truckRowModel = new VehicleRowModel(TruckFactory.CreateFirstStage(), 0, 36, 0, VehicleGhost.Ghost, VehicleDirection.RightToLeft);
 
             var vehicleContoller = new VehicleController(Player, playerController, new VehicleRowModel[]
@@ -57,7 +60,7 @@ namespace Frogger.States
                 bulldozerRowModel,
                 racingCarRowModel,
                 sedanCarRowModel,
-                duneBuggyRowModel,
+                DuneBuggyRowModel,
                 truckRowModel
             });
 
@@ -66,7 +69,7 @@ namespace Frogger.States
                 bulldozerRowModel,
                 racingCarRowModel,
                 sedanCarRowModel,
-                duneBuggyRowModel,
+                DuneBuggyRowModel,
                 truckRowModel
             });
 
@@ -111,6 +114,22 @@ namespace Frogger.States
             {
                 controller.Update(deltaTime);
             }
+
+            //int count = 0;
+
+            //foreach (var model in DuneBuggyRowModel.Vehicles)
+            //{
+            //    var xl = model.Position + DuneBuggyRowModel.OffsetLeft;
+            //    var xr = model.Position + DuneBuggyRowModel.OffsetRight;
+            //
+            //    Rectangle rR = new Rectangle((int)xr.X, (int)xr.Y, 16, 16);
+            //    Rectangle rL = new Rectangle((int)xl.X, (int)xl.Y, 16, 16);
+            //
+            //    Debugger.AddOrUpdateRect($"car{count}", rR, Color.Purple);
+            //    Debugger.AddOrUpdateRect($"ghost{count}", rL, Color.Blue);
+            //
+            //    count++;
+            //}
         }
     }
 }

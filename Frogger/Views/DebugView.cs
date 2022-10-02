@@ -26,15 +26,25 @@ namespace Frogger.Views
             RectTexture.SetData(new[] { Color.White });
         }
 
-        public void AddRect(string name, Rectangle rect, Color color)
+        public void AddOrUpdateRect(string name, Rectangle rect, Color color)
+        {
+            Rect r = new(rect, color);
+            
+            if (Rectangles.ContainsKey(name))
+            {
+                Rectangles[name] = r;
+                return;
+            }
+
+            Rectangles.Add(name, r);
+        }
+
+        public void RemoveRect(string name)
         {
             if (Rectangles.ContainsKey(name))
             {
-                throw new Exception($"Rect with name {name} already exists!");
+                Rectangles.Remove(name);
             }
-
-            Rect r = new(rect, color);
-            Rectangles.Add(name, r);
         }
 
         public override void Draw()
