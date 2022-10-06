@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Frogger.Controllers
 {
-    internal enum VehicleDirection
+    internal enum MovementDirection
     {
         LeftToRight,
         RightToLeft

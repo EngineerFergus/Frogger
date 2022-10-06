@@ -18,6 +18,7 @@ namespace Frogger.Controllers
         private FrogAnimation Animation = null;
         private Cooldown Cooler = null;
         private bool InDeathAnimation = false;
+        private float Force = 0f;
 
         public event EventHandler MoveFinished;
 
@@ -43,9 +44,13 @@ namespace Frogger.Controllers
             if (Animation != null && !Animation.Done)
             {
                 Animation.Update(deltaTime);
-                Model.Position = Animation.Position;
+                Model.Position = Animation.Position + new Vector2(Force * deltaTime, 0);
                 Model.Frame = Animation.Frame;
                 return;
+            }
+            else
+            {
+                Model.Position += new Vector2(Force * deltaTime, 0);
             }
 
             if (Animation != null && Animation.Done)
@@ -56,8 +61,8 @@ namespace Frogger.Controllers
                     Animation = null;
                     Model.Frame = 34;
                     Model.Flip = SpriteEffects.None;
+                    Force = 0f;
                     Model.Position = new Vector2((16 * 7) - 8, 224);
-                    Cooler = new Cooldown(0.5f);
                     InDeathAnimation = false;
                 }
                 else
@@ -121,7 +126,7 @@ namespace Frogger.Controllers
                         DeathCooldownPeriod);
 
                 InDeathAnimation = true;
-
+                Force = 0f;
                 Model.Flip = SpriteEffects.None;
             }
             else if (mode == ResetMode.Goal)
@@ -129,10 +134,16 @@ namespace Frogger.Controllers
                 Animation = null;
                 Model.Frame = 34;
                 Model.Flip = SpriteEffects.None;
+                Force = 0f;
                 Model.Position = new Vector2((16 * 7) - 8, 224);
                 Cooler = new Cooldown(0.5f);
                 InDeathAnimation = false;
             }
+        }
+
+        public void SetForce(float force)
+        {
+            Force = force;
         }
     }
 }

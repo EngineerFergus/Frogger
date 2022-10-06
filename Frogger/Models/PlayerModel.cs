@@ -20,7 +20,7 @@ namespace Frogger.Models
             HiScore = 12345;
             Score = 0;
             Frame = 34;
-            Position = new Vector2((16 * 7) - 8, 224);
+            Position = new Vector2((16 * 7), 224);
             Flip = SpriteEffects.None;
         }
 

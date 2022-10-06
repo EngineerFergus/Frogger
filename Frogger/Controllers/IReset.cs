@@ -11,5 +11,7 @@ namespace Frogger.Controllers
         event EventHandler MoveFinished;
 
         void Reset(ResetMode mode);
+
+        void SetForce(float force);
     }
 }

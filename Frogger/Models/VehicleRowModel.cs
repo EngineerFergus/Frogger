@@ -17,7 +17,7 @@ namespace Frogger.Models
         public float OffsetDistance { get; }
         public bool IsCoolingDown { get; set; }
         public VehicleGhost Ghost { get; }
-        public VehicleDirection Direction { get; set; }
+        public MovementDirection Direction { get; set; }
         public float CoolDownPeriod { get; set; }
         public float CurrentCooldown { get; set; }
         public float Speed { get; set; }
@@ -28,7 +28,7 @@ namespace Frogger.Models
             float pixelsPerSecond = 32f,
             float coolDownPeriod = -1,
             VehicleGhost ghost = VehicleGhost.Ghost,
-            VehicleDirection direction = VehicleDirection.LeftToRight
+            MovementDirection direction = MovementDirection.LeftToRight
             )
         {
             Vehicles.AddRange(models);
