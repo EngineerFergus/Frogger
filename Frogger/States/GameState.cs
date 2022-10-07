@@ -54,10 +54,14 @@ namespace Frogger.States
             DuneBuggyRowModel = new VehicleRowModel(GenericCarFactory.CreateFirstStage(y: 208, frame: 9), 0, 32f, 0f, VehicleGhost.Ghost, MovementDirection.RightToLeft);
             var truckRowModel = new VehicleRowModel(TruckFactory.CreateFirstStage(), 0, 36, 0, VehicleGhost.Ghost, MovementDirection.RightToLeft);
 
-            var riverObjectTop = new RiverRowModel(LogFactory.CreateRow1FirstStage(), new Rectangle(0, 48, 256, 16), 0, 32f);
-            var riverModels = new[] { riverObjectTop };
-            var riverView = new VehicleView(Machine.CurrentGame.Content, Sprites, riverModels);
+            var riverRow1 = new RiverRowModel(LogFactory.CreateRow1FirstStage(), new Rectangle(0, 48, 256, 16), 0, 36f, MovementDirection.LeftToRight);
+            var riverRow2 = new RiverRowModel(LogFactory.CreateRow2FirstStage(), new Rectangle(0, 64, 216, 16), 0, 36f, MovementDirection.RightToLeft);
+            var riverRow3 = new RiverRowModel(LogFactory.CreateRow3FirstStage(), new Rectangle(0, 80, 216, 16), 64, 36f, MovementDirection.LeftToRight);
+            var riverRow4 = new RiverRowModel(LogFactory.CreateRow4FirstStage(), new Rectangle(0, 96, 216, 16), 0, 36f, MovementDirection.RightToLeft);
+            var riverRow5 = new RiverRowModel(LogFactory.CreateRow5FirstStage(), new Rectangle(0, 112, 216, 16), 0, 36f, MovementDirection.LeftToRight);
+            var riverModels = new[] { riverRow1, riverRow2, riverRow3, riverRow4, riverRow5 };
 
+            var riverView = new VehicleView(Machine.CurrentGame.Content, Sprites, riverModels);
             Views.Add(riverView);
             var riverController = new RiverObjectController(Player, playerController, riverModels);
             Controllers.Add(riverController);

@@ -8,6 +8,7 @@ namespace Frogger.Controllers
     internal class RiverObjectController : BaseMoveableController
     {
         private readonly IReset Reset;
+        private bool OnRiverLane;
 
         public RiverObjectController(PlayerModel player, IReset reset, IEnumerable<VehicleRowModel> rows) : base(player, rows)
         {
@@ -31,22 +32,25 @@ namespace Frogger.Controllers
                         }
                         else
                         {
-                            Reset.Reset(ResetMode.Death, true);
-                            // TODO why is this bug happening?
+                            Reset.Reset(ResetMode.Death);
                         }
 
+                        OnRiverLane = true;
                         return;
                     }
                 }
             }
 
+            OnRiverLane = false;
             Reset.SetForce(0);
         }
 
         protected override void OnUpdate(float deltaTime)
         {
-            // what happens when froggy hits the bounds?
-
+            if (OnRiverLane && (Player.Position.X < 0 || Player.Position.X > 208))
+            {
+                Reset.Reset(ResetMode.Death, true);
+            }
         }
 
         protected override void OnCollision(Rectangle rect)

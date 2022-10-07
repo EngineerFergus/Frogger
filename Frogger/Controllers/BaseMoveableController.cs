@@ -76,14 +76,22 @@ namespace Frogger.Controllers
 
         protected bool TouchesObject(VehicleRowModel row, Rectangle playerArea, out Rectangle intersectRect)
         {
+            double threshold = 0.2;
+
             foreach (var vehicle in row.Vehicles)
             {
                 var rRect = new Rectangle((int)(vehicle.Position.X + row.OffsetRight.X), (int)vehicle.Position.Y, 16, 16);
 
                 if (rRect.Intersects(playerArea))
                 {
-                    intersectRect = rRect;
-                    return true;
+                    var iou = CalcIOU(rRect, playerArea);
+
+                    if(iou > threshold)
+                    {
+                        intersectRect = rRect;
+                        return true;
+                    }
+
                 }
 
                 if (row.Ghost == VehicleGhost.Ghost)
@@ -92,8 +100,15 @@ namespace Frogger.Controllers
 
                     if (lRect.Intersects(playerArea))
                     {
-                        intersectRect = lRect;
-                        return true;
+                        var iou = CalcIOU(lRect, playerArea);
+
+                        // TODO determine if IOU is okay or not, maybe try something else
+
+                        if (iou > threshold)
+                        {
+                            intersectRect = lRect;
+                            return true;
+                        }
                     }
                 }
             }
@@ -108,5 +123,20 @@ namespace Frogger.Controllers
         }
 
         protected abstract void OnCollision(Rectangle rect);
+
+        protected double CalcIOU(Rectangle A, Rectangle B)
+        {
+            Rectangle intersect = Rectangle.Intersect(A, B);
+            Rectangle union = Rectangle.Union(A, B);
+            double IA = intersect.Width * intersect.Height;
+            double UA = union.Width * union.Height;
+            return IA / UA;
+        }
+
+        protected int CalcIntersectWidth(Rectangle A, Rectangle B)
+        {
+            Rectangle intersect = Rectangle.Intersect(A, B);
+            return intersect.Width;
+        }
     }
 }
