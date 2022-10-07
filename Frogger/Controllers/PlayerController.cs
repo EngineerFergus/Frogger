@@ -55,14 +55,13 @@ namespace Frogger.Controllers
 
             if (Animation != null && Animation.Done)
             {
-                
                 if (InDeathAnimation)
                 {
                     Animation = null;
                     Model.Frame = 34;
                     Model.Flip = SpriteEffects.None;
                     Force = 0f;
-                    Model.Position = new Vector2((16 * 7) - 8, 224);
+                    Model.Position = new Vector2((16 * 7), 224);
                     InDeathAnimation = false;
                 }
                 else
@@ -73,9 +72,9 @@ namespace Frogger.Controllers
                 }
             }
 
-            Animation = null;
-
             if (InDeathAnimation) { return; }
+
+            Animation = null;
 
             var state = Keyboard.GetState();
             var pressedKeys = state.GetPressedKeys();
@@ -114,28 +113,32 @@ namespace Frogger.Controllers
             }
         }
 
-        public void Reset(ResetMode mode)
+        public void Reset(ResetMode mode, bool resetForce = false)
         {
             if (mode == ResetMode.Death && !InDeathAnimation)
             {
                 // TODO what happens when Player has no lives?
                 Model.Lives--;
+                InDeathAnimation = true;
+                Model.Flip = SpriteEffects.None;
+
+                if (resetForce)
+                {
+                    Force = 0f;
+                }
+
                 Animation = new FrogAnimation(new int[] { 19, 20, 21, 22 },
                         Model.Position,
                         new Vector2(0, 0),
                         DeathCooldownPeriod);
-
-                InDeathAnimation = true;
-                Force = 0f;
-                Model.Flip = SpriteEffects.None;
             }
             else if (mode == ResetMode.Goal)
             {
                 Animation = null;
                 Model.Frame = 34;
                 Model.Flip = SpriteEffects.None;
-                Force = 0f;
                 Model.Position = new Vector2((16 * 7) - 8, 224);
+                Force = 0f;
                 Cooler = new Cooldown(0.5f);
                 InDeathAnimation = false;
             }

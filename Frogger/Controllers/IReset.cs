@@ -10,7 +10,7 @@ namespace Frogger.Controllers
     {
         event EventHandler MoveFinished;
 
-        void Reset(ResetMode mode);
+        void Reset(ResetMode mode, bool resetForce = false);
 
         void SetForce(float force);
     }

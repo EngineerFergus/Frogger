@@ -31,7 +31,7 @@ namespace Frogger.Controllers
                         }
                         else
                         {
-                            Reset.Reset(ResetMode.Death);
+                            Reset.Reset(ResetMode.Death, true);
                             // TODO why is this bug happening?
                         }
 
