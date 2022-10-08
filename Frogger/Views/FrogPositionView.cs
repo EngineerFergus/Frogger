@@ -22,9 +22,9 @@ namespace Frogger.Views
 
         public override void Draw()
         {
-            string msg = Model.Position.ToString().Replace("{", "(").Replace("}", ")");
+            //string msg = Model.Position.ToString().Replace("{", "(").Replace("}", ")");
 
-            Font.Draw(msg, new Vector2(4, 64), Color.Orange);
+            //Font.Draw(msg, new Vector2(4, 64), Color.Orange);
         }
     }
 }

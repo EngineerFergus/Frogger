@@ -15,7 +15,7 @@ namespace Frogger.Controllers
 
         protected override void OnCollision(Rectangle rect)
         {
-            //Reset.Reset(ResetMode.Death);
+            Reset.Reset(ResetMode.Death);
         }
     }
 }

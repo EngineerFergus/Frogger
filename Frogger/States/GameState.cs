@@ -14,79 +14,19 @@ namespace Frogger.States
     {
         private static readonly int Scale = 2;
 
-        private readonly List<BaseView> Views = new List<BaseView>();
-        private readonly List<IController> Controllers = new List<IController>();
-        private readonly SpriteBatch Sprites;
-        private readonly RenderTarget2D Screen;
-        private readonly PlayerModel Player;
-        private readonly DebugView Debugger;
+        private List<BaseView> Views = new List<BaseView>();
+        private List<IController> Controllers = new List<IController>();
+        private SpriteBatch Sprites;
+        private RenderTarget2D Screen;
+        private PlayerModel Player;
+        private DebugView Debugger;
+        private RiverRowModel[] RiverModels;
 
         private VehicleRowModel DuneBuggyRowModel;
 
         public GameState(StateMachine stateMachine) : base(stateMachine)
         {
-            Screen = new RenderTarget2D(stateMachine.CurrentGame.GraphicsDevice, 224, 256);
-            Sprites = new SpriteBatch(stateMachine.CurrentGame.GraphicsDevice);
-
-            Player = new PlayerModel();
-            GoalContainerModel goals = new();
-
-            Debugger = new DebugView(stateMachine.CurrentGame.Content, Sprites);
-
-
-            Views.Add(new BackgroundView(stateMachine.CurrentGame.Content, Sprites));
-            Views.Add(new ScoreView(stateMachine.CurrentGame.Content, Sprites, Player));
-            Views.Add(new FrogPositionView(stateMachine.CurrentGame.Content, Sprites, Player));
-            Views.Add(new GoalView(stateMachine.CurrentGame.Content, Sprites, goals));
-            Views.Add(Debugger);
-
-            //Debugger.AddOrUpdateRect("river", new Rectangle(0, 48, 244, 80), new Color(Color.Red, 0.25f));
-
-            PlayerController playerController = new(Player);
-
-            Controllers.Add(new GoalController(Player, goals, playerController));
-            Controllers.Add(new HomeAnimationController(goals));
-            Controllers.Add(playerController);
-
-            var bulldozerRowModel = new VehicleRowModel(BulldozerFactory.CreateFirstStage(), pixelsPerSecond: 32f);
-            var racingCarRowModel = new VehicleRowModel(RacingCarFactory.CreateFirstStage(), 0, 128f, 2f, VehicleGhost.NoGhost);
-            var sedanCarRowModel = new VehicleRowModel(GenericCarFactory.CreateFirstStage(), 0, 32f, 0f, VehicleGhost.Ghost, MovementDirection.RightToLeft);
-            DuneBuggyRowModel = new VehicleRowModel(GenericCarFactory.CreateFirstStage(y: 208, frame: 9), 0, 32f, 0f, VehicleGhost.Ghost, MovementDirection.RightToLeft);
-            var truckRowModel = new VehicleRowModel(TruckFactory.CreateFirstStage(), 0, 36, 0, VehicleGhost.Ghost, MovementDirection.RightToLeft);
-
-            var riverRow1 = new RiverRowModel(LogFactory.CreateRow1FirstStage(), new Rectangle(0, 48, 256, 16), 0, 36f, MovementDirection.LeftToRight);
-            var riverRow2 = new RiverRowModel(LogFactory.CreateRow2FirstStage(), new Rectangle(0, 64, 216, 16), 0, 36f, MovementDirection.RightToLeft);
-            var riverRow3 = new RiverRowModel(LogFactory.CreateRow3FirstStage(), new Rectangle(0, 80, 216, 16), 64, 36f, MovementDirection.LeftToRight);
-            var riverRow4 = new RiverRowModel(LogFactory.CreateRow4FirstStage(), new Rectangle(0, 96, 216, 16), 0, 36f, MovementDirection.RightToLeft);
-            var riverRow5 = new RiverRowModel(LogFactory.CreateRow5FirstStage(), new Rectangle(0, 112, 216, 16), 0, 36f, MovementDirection.LeftToRight);
-            var riverModels = new[] { riverRow1, riverRow2, riverRow3, riverRow4, riverRow5 };
-
-            var riverView = new VehicleView(Machine.CurrentGame.Content, Sprites, riverModels);
-            Views.Add(riverView);
-            var riverController = new RiverObjectController(Player, playerController, riverModels);
-            Controllers.Add(riverController);
-
-            var vehicleContoller = new VehicleController(Player, playerController, new VehicleRowModel[]
-            {
-                bulldozerRowModel,
-                racingCarRowModel,
-                sedanCarRowModel,
-                DuneBuggyRowModel,
-                truckRowModel
-            });
-            Controllers.Add(vehicleContoller);
-
-            var vehicleView = new VehicleView(stateMachine.CurrentGame.Content, Sprites, new VehicleRowModel[]
-            {
-                bulldozerRowModel,
-                racingCarRowModel,
-                sedanCarRowModel,
-                DuneBuggyRowModel,
-                truckRowModel
-            });
-
-            Views.Add(vehicleView);
-            Views.Add(new PlayerView(stateMachine.CurrentGame.Content, Sprites, Player));
+            
         }
 
         public override void Draw()
@@ -110,13 +50,90 @@ namespace Frogger.States
             Sprites.End();
         }
 
-        public override void Enter()
+        public override void Enter(params object[] args)
         {
+            Screen = new RenderTarget2D(Machine.CurrentGame.GraphicsDevice, 224, 256);
+            Sprites = new SpriteBatch(Machine.CurrentGame.GraphicsDevice);
 
+            bool resetForNewGame = true;
+            if (args.Length > 0 && args[0] is bool)
+            {
+                resetForNewGame = (bool)args[0];
+            }
+
+            if (resetForNewGame)
+            {
+                Player = new PlayerModel();
+            }
+            else
+            {
+                Player.ResetAfterLevel();
+            }
+
+            GoalContainerModel goals = new();
+
+            Debugger = new DebugView(Machine.CurrentGame.Content, Sprites);
+
+
+            Views.Add(new BackgroundView(Machine.CurrentGame.Content, Sprites));
+            Views.Add(new ScoreView(Machine.CurrentGame.Content, Sprites, Player));
+            Views.Add(new FrogPositionView(Machine.CurrentGame.Content, Sprites, Player));
+            Views.Add(new GoalView(Machine.CurrentGame.Content, Sprites, goals));
+            Views.Add(Debugger);
+
+            //Debugger.AddOrUpdateRect("river", new Rectangle(0, 48, 244, 80), new Color(Color.Red, 0.25f));
+
+            PlayerController playerController = new(Player);
+
+            Controllers.Add(new GoalController(Player, goals, playerController));
+            Controllers.Add(new HomeAnimationController(goals));
+            Controllers.Add(playerController);
+
+            var bulldozerRowModel = new VehicleRowModel(BulldozerFactory.CreateFirstStage(), pixelsPerSecond: 32f);
+            var racingCarRowModel = new VehicleRowModel(RacingCarFactory.CreateFirstStage(), 0, 128f, 2f, VehicleGhost.NoGhost);
+            var sedanCarRowModel = new VehicleRowModel(GenericCarFactory.CreateFirstStage(), 0, 32f, 0f, VehicleGhost.Ghost, MovementDirection.RightToLeft);
+            DuneBuggyRowModel = new VehicleRowModel(GenericCarFactory.CreateFirstStage(y: 208, frame: 9), 0, 32f, 0f, VehicleGhost.Ghost, MovementDirection.RightToLeft);
+            var truckRowModel = new VehicleRowModel(TruckFactory.CreateFirstStage(), 0, 36, 0, VehicleGhost.Ghost, MovementDirection.RightToLeft);
+
+            var riverRow1 = new RiverRowModel(LogFactory.CreateRow1FirstStage(), new Rectangle(0, 48, 256, 16), 0, 36f, MovementDirection.LeftToRight);
+            var riverRow2 = new RiverRowModel(LogFactory.CreateRow2FirstStage(), new Rectangle(0, 64, 216, 16), 0, 36f, MovementDirection.RightToLeft);
+            var riverRow3 = new RiverRowModel(LogFactory.CreateRow3FirstStage(), new Rectangle(0, 80, 216, 16), 64, 36f, MovementDirection.LeftToRight);
+            var riverRow4 = new RiverRowModel(LogFactory.CreateRow4FirstStage(), new Rectangle(0, 96, 216, 16), 0, 36f, MovementDirection.RightToLeft);
+            var riverRow5 = new RiverRowModel(LogFactory.CreateRow5FirstStage(), new Rectangle(0, 112, 216, 16), 0, 36f, MovementDirection.LeftToRight);
+            RiverModels = new[] { riverRow1, riverRow2, riverRow3, riverRow4, riverRow5 };
+
+            var riverView = new VehicleView(Machine.CurrentGame.Content, Sprites, RiverModels);
+            Views.Add(riverView);
+            var riverController = new RiverObjectController(Player, playerController, RiverModels);
+            Controllers.Add(riverController);
+
+            var vehicleContoller = new VehicleController(Player, playerController, new VehicleRowModel[]
+            {
+                bulldozerRowModel,
+                racingCarRowModel,
+                sedanCarRowModel,
+                DuneBuggyRowModel,
+                truckRowModel
+            });
+            Controllers.Add(vehicleContoller);
+
+            var vehicleView = new VehicleView(Machine.CurrentGame.Content, Sprites, new VehicleRowModel[]
+            {
+                bulldozerRowModel,
+                racingCarRowModel,
+                sedanCarRowModel,
+                DuneBuggyRowModel,
+                truckRowModel
+            });
+
+            Views.Add(vehicleView);
+            Views.Add(new PlayerView(Machine.CurrentGame.Content, Sprites, Player));
         }
 
         public override void Exit()
         {
+            Views.Clear();
+            Controllers.Clear();
 
         }
 
@@ -127,21 +144,15 @@ namespace Frogger.States
                 controller.Update(deltaTime);
             }
 
-            //int count = 0;
-
-            //foreach (var model in DuneBuggyRowModel.Vehicles)
-            //{
-            //    var xl = model.Position + DuneBuggyRowModel.OffsetLeft;
-            //    var xr = model.Position + DuneBuggyRowModel.OffsetRight;
-            //
-            //    Rectangle rR = new Rectangle((int)xr.X, (int)xr.Y, 16, 16);
-            //    Rectangle rL = new Rectangle((int)xl.X, (int)xl.Y, 16, 16);
-            //
-            //    Debugger.AddOrUpdateRect($"car{count}", rR, Color.Purple);
-            //    Debugger.AddOrUpdateRect($"ghost{count}", rL, Color.Blue);
-            //
-            //    count++;
-            //}
+            if (Player.Goals == 5)
+            {
+                Player.Score += 1000;
+                Machine.Change("game", false);
+            }
+            else if (Player.Lives == 0)
+            {
+                Machine.Change("gameover");
+            }
         }
     }
 }

@@ -20,6 +20,8 @@ namespace Frogger.Controllers
         private bool InDeathAnimation = false;
         private float Force = 0f;
 
+        public bool Disabled { get; set; }
+
         public event EventHandler MoveFinished;
 
         public PlayerController(PlayerModel model)
@@ -68,11 +70,16 @@ namespace Frogger.Controllers
                 {
                     Model.Position = Animation.Position;
                     Model.Frame = Animation.Frame;
+                    Model.Score += 10;
+                    if (Model.Score > Model.HiScore)
+                    {
+                        Model.HiScore = Model.Score;
+                    }
                     MoveFinished?.Invoke(this, EventArgs.Empty);
                 }
             }
 
-            if (InDeathAnimation) { return; }
+            if (InDeathAnimation || Disabled) { return; }
 
             Animation = null;
 
@@ -138,6 +145,14 @@ namespace Frogger.Controllers
                 Model.Frame = 34;
                 Model.Flip = SpriteEffects.None;
                 Model.Position = new Vector2((16 * 7) - 8, 224);
+                Model.Score += 50;
+                Model.Goals++;
+
+                if (Model.Score > Model.HiScore)
+                {
+                    Model.HiScore = Model.Score;
+                }
+
                 Force = 0f;
                 Cooler = new Cooldown(0.5f);
                 InDeathAnimation = false;

@@ -24,7 +24,9 @@ namespace Frogger
         {
             StateComponent stateComponent = new(this);
             GameState gameState = new GameState(stateComponent.Machine);
+            GameOverState gameOverState = new GameOverState(stateComponent.Machine);
             stateComponent.Machine.Add("game", gameState);
+            stateComponent.Machine.Add("gameover", gameOverState);
 
             // TODO: Add all remaining states
 

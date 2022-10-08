@@ -76,22 +76,14 @@ namespace Frogger.Controllers
 
         protected bool TouchesObject(VehicleRowModel row, Rectangle playerArea, out Rectangle intersectRect)
         {
-            double threshold = 0.2;
-
             foreach (var vehicle in row.Vehicles)
             {
                 var rRect = new Rectangle((int)(vehicle.Position.X + row.OffsetRight.X), (int)vehicle.Position.Y, 16, 16);
 
                 if (rRect.Intersects(playerArea))
                 {
-                    var iou = CalcIOU(rRect, playerArea);
-
-                    if(iou > threshold)
-                    {
-                        intersectRect = rRect;
-                        return true;
-                    }
-
+                    intersectRect = rRect;
+                    return true;
                 }
 
                 if (row.Ghost == VehicleGhost.Ghost)
@@ -100,15 +92,8 @@ namespace Frogger.Controllers
 
                     if (lRect.Intersects(playerArea))
                     {
-                        var iou = CalcIOU(lRect, playerArea);
-
-                        // TODO determine if IOU is okay or not, maybe try something else
-
-                        if (iou > threshold)
-                        {
-                            intersectRect = lRect;
-                            return true;
-                        }
+                        intersectRect = lRect;
+                        return true;
                     }
                 }
             }

@@ -13,7 +13,7 @@
 
         public abstract void Draw();
 
-        public abstract void Enter();
+        public abstract void Enter(params object[] args);
 
         public abstract void Exit();
     }

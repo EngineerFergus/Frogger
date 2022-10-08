@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.ObjectiveC;
 
 namespace Frogger.FSM
 {
@@ -20,7 +21,7 @@ namespace Frogger.FSM
             States.Add(stateName, state);
         }
 
-        public void Change(string stateName)
+        public void Change(string stateName, params object[] args)
         {
             if (!States.ContainsKey(stateName))
             {
@@ -33,7 +34,7 @@ namespace Frogger.FSM
             }
 
             CurrentState = States[stateName];
-            CurrentState.Enter();
+            CurrentState.Enter(args);
         }
 
         public void Draw()

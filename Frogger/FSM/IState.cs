@@ -6,7 +6,7 @@
 
         void Draw();
 
-        void Enter();
+        void Enter(params object[] args);
 
         void Exit();
     }
